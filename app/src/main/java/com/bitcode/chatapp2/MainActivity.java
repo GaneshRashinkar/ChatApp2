@@ -1,8 +1,12 @@
 package com.bitcode.chatapp2;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -15,6 +19,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bitcode.chatapp2.Fragments.ChatFragment;
+import com.bitcode.chatapp2.Fragments.UsersFragment;
 import com.bitcode.chatapp2.Model.User;
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
@@ -25,6 +31,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -48,8 +56,17 @@ public class MainActivity extends AppCompatActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
         reference.addValueEventListener(new MyValueEventListner());
+
         TabLayout tabLayout=findViewById(R.id.tab_layout);
         ViewPager viewPager=findViewById(R.id.view_pager);
+
+        ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
+
+        viewPagerAdapter.addFragment(new ChatFragment(),"chats");
+        viewPagerAdapter.addFragment(new UsersFragment(),"users");
+        viewPager.setAdapter(viewPagerAdapter);
+
+        tabLayout.setupWithViewPager(viewPager);
 
     }
     class MyValueEventListner implements ValueEventListener{
@@ -91,6 +108,37 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+    class ViewPagerAdapter extends FragmentPagerAdapter{
+        private ArrayList<Fragment> fragments;
+        private ArrayList<String> titles;
+
+        public ViewPagerAdapter(@NonNull FragmentManager fm) {
+            super(fm);
+            this.fragments=new ArrayList<>();
+            this.titles=new ArrayList<>();
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+        public void addFragment(Fragment fragment,String title){
+            fragments.add(fragment);
+            titles.add(title);
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles.get(position);
+        }
     }
 
     public void mt(String text){
