@@ -1,6 +1,7 @@
 package com.bitcode.chatapp2.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public UserAdapter(Context context, List<User> users){
         mContext=context;
         mUsers=users;
+        Log.e("tag","within user adapter constructor");
     }
 
     @NonNull
@@ -46,7 +48,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mUsers.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

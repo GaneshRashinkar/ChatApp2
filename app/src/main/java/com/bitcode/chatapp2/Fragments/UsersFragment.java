@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.bitcode.chatapp2.Adapter.UserAdapter;
 import com.bitcode.chatapp2.Model.User;
@@ -40,6 +41,7 @@ public class UsersFragment extends Fragment {
         mRecyclerView=view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         mUsers=new ArrayList<>();
         readUsers();
         return view;
